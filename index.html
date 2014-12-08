@@ -10,7 +10,7 @@
 		<script type="text/javascript" charset="utf-8" src="./cordova.js"></script>
 		<script>
 
-			function submitForm(){
+			function loginForm(){
 				var Email = null;
 				var pwd = null;
 				pwd = $("#Password_login").val();
@@ -104,7 +104,7 @@
 			<!-- /header -->
 			<!-- Content    -->
 			<div data-role="content">
-				<form method="POST" onSubmit = "return submitForm()" data-ajax="false">
+				<form method="POST" onSubmit = "return loginForm()" data-ajax="false">
 					<input name="Email" id="Email_login" type = "text" placeholder = "Email" required>
 					<input name="Password" id="Password_login" type = "password" placeholder = "Password" required>
 					<input type = "submit" value = "Login">
