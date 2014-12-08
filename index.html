@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+	<title>My first Phonegap App</title>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
+		<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+		<script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+		<script type="text/javascript" charset="utf-8" src="./cordova.js"></script>
+		<script>
+
+			function submitForm(){
+				var Email = null;
+				var pwd = null;
+				pwd = $("#Password_login").val();
+				Email = $("#Email_login").val();
+				//alert(Email);
+
+				var itemKey = window.localStorage.key(Email);
+				var outputArray = window.localStorage.getItem(itemKey);
+				//alert(outputArray);
+
+
+				if(outputArray==null){
+					$.mobile.changePage("#Bad",{reverse: false, transition:"slidefade"});
+					return false;
+				}
+				else{
+					var outputValue = outputArray.split(";");
+					var password = outputValue[0];
+					var genderOut = outputValue[1];
+					var interestOut = outputValue[2];
+				}
+				var eq = password.localeCompare(pwd);
+				if(eq == 0){
+					$.mobile.changePage("#myProfile",{reverse: false, transition:"flip"});
+					if(interestOut=="")
+					{
+						interestOut = "None";
+					}
+					$('#output').html("Email: " + Email + "<br/>Gender: " + genderOut + "<br/>Interests: " +interestOut );
+					return false;
+				}
+				else{
+					$.mobile.changePage("#Bad",{reverse: false, transition:"slidefade"});
+					return false;
+				}
+
+			}
+
+			function signUpForm(){
+				window.localStorage.clear();
+				var Email = $("#Email_signup").val();
+				var pwd = $("#password_signup").val();
+				var gender = $("input[name='Gender']:checked").val();
+
+				//creating array to store checked checkbox values
+				var checkboxValue = new Array();
+				$(".custom:checked").each(function() {
+						checkboxValue.push($(this).val());
+				});
+
+				//alert(Email + "" +pwd +"" + gender + "" +checkboxValue);
+
+				//creating array to store input values under one key
+				var valueArray = new Array();
+				valueArray.push(pwd);
+				valueArray.push(gender);
+				valueArray.push(checkboxValue);
+				//alert(valueArray);
+
+				window.localStorage.setItem(Email, valueArray.join(";"));
+
+				$.mobile.changePage("#myProfile",{reverse: false, transition:"slideup"});
+				var itemKey = window.localStorage.key(Email);
+				var outputArray = window.localStorage.getItem(itemKey);
+
+				//alert("output"+outputArray);
+				var outputValue = outputArray.split(";");
+				//var EmailOut = outputValue[0];
+				var genderOut = outputValue[1];
+				var interestOut = outputValue[2];
+				if(interestOut=="")
+				{
+					interestOut = "None";
+				}
+				$('#output').html("Email: " + Email + "<br/>Gender: " + genderOut + "<br/>Interests: " +interestOut );
+
+				return false;
+			}
+
+
+		</script>
+
+	</head>
+	<body>
+		<!-- Start of page1 -->
+		<div data-role="page" id="loginPage">
+			<!-- Header -->
+			<div data-role="header">
+				<h1> My First Phonegap App </h1>
+			</div>
+			<!-- /header -->
+			<!-- Content    -->
+			<div data-role="content">
+				<form method="POST" onSubmit = "return submitForm()" data-ajax="false">
+					<input name="Email" id="Email_login" type = "text" placeholder = "Email" required>
+					<input name="Password" id="Password_login" type = "password" placeholder = "Password" required>
+					<input type = "submit" value = "Login">
+				</form>
+				<p> Not a member yet? </p>
+				<a href="#signUpPage" data-transition="flip"> Sign Up </a>
+			</div>
+			<!-- footer -->
+			<div data-role="footer">
+				<h4>&copy; Madhu Anandan</h4>
+			</div>
+			<!-- /footer -->
+		</div>
+		<!-- /page -->
+
+		<!-- Start of page2 -->
+		<div data-role="page" id="signUpPage">
+			<!-- Header -->
+			<div data-role="header">
+				<h1> Sign Up </h1>
+			</div>
+			<!-- /header -->
+			<!-- Content    -->
+			<div data-role="content">
+				<form method="POST" onSubmit = "return signUpForm()" data-ajax="false">
+					<input name = "Email" id="Email_signup" type="text" placeholder = "Email" required>
+					<input name = "Password" id="password_signup" type="password" placeholder = "Password" required></br>
+				<fieldset data-role="controlgroup">
+					<legend>Gender:</legend>
+     				<input type="radio" name="Gender" id="radio-choice-1" value="Male" />
+     				<label for="radio-choice-1">Male</label>
+
+     				<input type="radio" name="Gender" id="radio-choice-2" value="Female"  />
+     				<label for="radio-choice-2">Female</label>
+				</fieldset>
+
+				<fieldset data-role="controlgroup">
+				    <legend>Interests:</legend>
+				      <input type="checkbox" name="checkbox-1a" id="checkbox-1a" class="custom" value="Sports">
+				      <label for="checkbox-1a">Sports</label>
+
+				      <input type="checkbox" name="checkbox-2a" id="checkbox-2a" class="custom" value="Art">
+				      <label for="checkbox-2a">Art</label>
+
+				      <input type="checkbox" name="checkbox-3a" id="checkbox-3a" class="custom" value="Music">
+				      <label for="checkbox-3a">Music</label>
+
+				      <input type="checkbox" name="checkbox-4a" id="checkbox-4a" class="custom" value="Books">
+				      <label for="checkbox-4a">Books</label>
+    			</fieldset>
+
+
+					<input type = "submit" value = "Sign Up">
+				</form>
+			</div>
+			<!-- /content -->
+			<!-- footer -->
+			<div data-role="footer">
+				<h4>Madhu Anandan</h4>
+			</div>
+			<!-- /footer -->
+		</div>
+		<!-- /page -->
+
+		<!-- Start of page3 -->
+		<div data-role="page" id="myProfile">
+			<!-- Header -->
+			<div data-role="header">
+				<h1> My Profile </h1>
+			</div>
+			<!-- /header -->
+			<!-- Content    -->
+			<div data-role="content">
+				<div id="output">
+				</div>
+			</div>
+			<!-- /content -->
+			<!-- footer -->
+			<div data-role="footer">
+				<h4>Madhu Anandan</h4>
+			</div>
+			<!-- /footer -->
+		</div>
+		<!-- /page -->
+
+		<!-- Start of page4 -->
+		<div data-role="page" id="Bad">
+			<!-- Header -->
+			<div data-role="header">
+				<h1> Invalid Credentials </h1>
+			</div>
+			<!-- /header -->
+			<!-- Content    -->
+			<div data-role="content">
+				<p>Invalid Credentials!!!<br/>If you are a new user please <a href="#signUpPage" data-transition="flip">Sign Up</a><br/><a href="#loginPage" data-transition="flip">Login</a></p>
+			</div>
+			<!-- /content -->
+			<!-- footer -->
+			<div data-role="footer">
+				<h4>Madhu Anandan</h4>
+			</div>
+			<!-- /footer -->
+		</div>
+		<!-- /page -->
+
+	</body>
+</html>
