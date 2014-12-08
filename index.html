@@ -23,7 +23,7 @@
 
 
 				if(outputArray==null){
-					$.mobile.changePage("#Bad",{reverse: false, transition:"slidefade"});
+					$.mobile.changePage("#invalidPage",{reverse: false, transition:"slidefade"});
 					return false;
 				}
 				else{
@@ -43,7 +43,7 @@
 					return false;
 				}
 				else{
-					$.mobile.changePage("#Bad",{reverse: false, transition:"slidefade"});
+					$.mobile.changePage("#invalidPage",{reverse: false, transition:"slidefade"});
 					return false;
 				}
 
@@ -191,7 +191,7 @@
 		<!-- /page -->
 
 		<!-- Start of page4 -->
-		<div data-role="page" id="Bad">
+		<div data-role="page" id="invalidPage">
 			<!-- Header -->
 			<div data-role="header">
 				<h1> Invalid Credentials </h1>
