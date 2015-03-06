@@ -1,0 +1,8 @@
+			.bgmImage {
+			    background: url("./bgm.jpg") no-repeat;
+				background-size: 100% auto;
+			}
+
+			.norm{color:green}
+
+			p{color:#FE2E2E}
