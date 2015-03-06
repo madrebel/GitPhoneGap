@@ -1,116 +1,111 @@
 <!DOCTYPE html>
 <html>
-	<title>My first Phonegap App</title>
+	<title>Phonegap App</title>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
+		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 		<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
 		<script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
 		<script type="text/javascript" charset="utf-8" src="./cordova.js"></script>
 		<script>
 
-			function loginForm(){
-				var Email = null;
-				var pwd = null;
-				pwd = $("#Password_login").val();
-				Email = $("#Email_login").val();
-				//alert(Email);
+			// takes the form field value and returns true on valid number
+			//source:http://stackoverflow.com/questions/12310837/implementation-of-luhn-algorithm
 
-				var itemKey = window.localStorage.key(Email);
-				var outputArray = window.localStorage.getItem(itemKey);
-				//alert(outputArray);
+			function verifyCard() {
+			var value = null;
+			value = $("#creditNumber").val();
+			//alert(value);
 
+			// accept only digits, dashes or spaces
+			    if (/[^0-9-\s]+/.test(value))
+			    {
+			    	alert("Invalid characters found !! Re-enter your card number");
+			    	return false;
+			   	}
 
-				if(outputArray==null){
-					$.mobile.changePage("#invalidPage",{reverse: false, transition:"slidefade"});
-					return false;
-				}
-				else{
-					var outputValue = outputArray.split(";");
-					var password = outputValue[0];
-					var genderOut = outputValue[1];
-					var interestOut = outputValue[2];
-				}
-				var eq = password.localeCompare(pwd);
-				if(eq == 0){
-					$.mobile.changePage("#myProfile",{reverse: false, transition:"flip"});
-					if(interestOut=="")
-					{
-						interestOut = "None";
-					}
-					$('#output').html("Email: " + Email + "<br/>Gender: " + genderOut + "<br/>Interests: " +interestOut );
-					return false;
-				}
-				else{
-					$.mobile.changePage("#invalidPage",{reverse: false, transition:"slidefade"});
-					return false;
-				}
+			// The Luhn Algorithm.
+			    var nCheck = 0, nDigit = 0, bEven = false;
+			    value = value.replace(/\D/g, "");
 
+			    for (var n = value.length - 1; n >= 0; n--) {
+			        var cDigit = value.charAt(n),
+			            nDigit = parseInt(cDigit, 10);
+
+			        if (bEven) {
+			            if ((nDigit *= 2) > 9) nDigit -= 9;
+			        }
+
+			        nCheck += nDigit;
+			        bEven = !bEven;
+			    }
+
+			    //return (nCheck % 10) == 0;
+			    if ((nCheck % 10) == 0){
+					$.mobile.changePage("#validPage",{reverse: false, transition:"flip"});
+					return true;
+			    }
+			    else{
+			    	$.mobile.changePage("#invalidPage",{reverse: false, transition:"flip"});
+			    	return false;
+			    }
 			}
-
-			function signUpForm(){
-				window.localStorage.clear();
-				var Email = $("#Email_signup").val();
-				var pwd = $("#password_signup").val();
-				var gender = $("input[name='Gender']:checked").val();
-
-				//creating array to store checked checkbox values
-				var checkboxValue = new Array();
-				$(".custom:checked").each(function() {
-						checkboxValue.push($(this).val());
-				});
-
-				//alert(Email + "" +pwd +"" + gender + "" +checkboxValue);
-
-				//creating array to store input values under one key
-				var valueArray = new Array();
-				valueArray.push(pwd);
-				valueArray.push(gender);
-				valueArray.push(checkboxValue);
-				//alert(valueArray);
-
-				window.localStorage.setItem(Email, valueArray.join(";"));
-
-				$.mobile.changePage("#myProfile",{reverse: false, transition:"slideup"});
-				var itemKey = window.localStorage.key(Email);
-				var outputArray = window.localStorage.getItem(itemKey);
-
-				//alert("output"+outputArray);
-				var outputValue = outputArray.split(";");
-				//var EmailOut = outputValue[0];
-				var genderOut = outputValue[1];
-				var interestOut = outputValue[2];
-				if(interestOut=="")
-				{
-					interestOut = "None";
-				}
-				$('#output').html("Email: " + Email + "<br/>Gender: " + genderOut + "<br/>Interests: " +interestOut );
-
-				return false;
-			}
-
 
 		</script>
+		<style>
+			.bgmImage {
+			    background: url("./bgm.jpg") no-repeat;
+				background-size: 100% auto;
+			}
 
+			.norm{color:green}
+
+			p{color:#FE2E2E}
+		</style>
 	</head>
 	<body>
 		<!-- Start of page1 -->
 		<div data-role="page" id="loginPage">
 			<!-- Header -->
 			<div data-role="header">
-				<h1> My First Phonegap App </h1>
+				<h1> Phonegap App </h1>
 			</div>
 			<!-- /header -->
 			<!-- Content    -->
+			<div class="bgmImage">
 			<div data-role="content">
-				<form method="POST" onSubmit = "return loginForm()" data-ajax="false">
-					<input name="Email" id="Email_login" type = "text" placeholder = "Email" required>
-					<input name="Password" id="Password_login" type = "password" placeholder = "Password" required>
-					<input type = "submit" value = "Login">
+
+				<center>
+				<p><b>Welcome to Home page!</b><br/></p>
+				<a href="#paymentPage" data-transition="flip"> Click here to enter card details </a>
+				</center>
+				</div>
+			</div>
+			<!-- footer -->
+			<div data-role="footer">
+				<h4>&copy; Madhu Anandan </h4>
+			</div>
+			<!-- /footer -->
+		</div>
+		<!-- /page -->
+
+		<!-- Start of page2 -->
+		<div data-role="page" id="paymentPage">
+			<!-- Header -->
+			<div data-role="header">
+				<h1> Payments </h1>
+			</div>
+			<!-- /header -->
+			<!-- Content    -->
+			<div class="bgmImage">
+				<div data-role="content">
+				<form method="POST" onSubmit = "return verifyCard()" data-ajax="false">
+					<input name = "ccnum" id="creditNumber" type="text" placeholder = "Credit card number" required>
+					<input type = "submit" value = "Submit">
 				</form>
-				<p> Not a member yet? </p>
-				<a href="#signUpPage" data-transition="flip"> Sign Up </a>
+				</div>
 			</div>
 			<!-- footer -->
 			<div data-role="footer">
@@ -120,60 +115,11 @@
 		</div>
 		<!-- /page -->
 
-		<!-- Start of page2 -->
-		<div data-role="page" id="signUpPage">
-			<!-- Header -->
-			<div data-role="header">
-				<h1> Sign Up </h1>
-			</div>
-			<!-- /header -->
-			<!-- Content    -->
-			<div data-role="content">
-				<form method="POST" onSubmit = "return signUpForm()" data-ajax="false">
-					<input name = "Email" id="Email_signup" type="text" placeholder = "Email" required>
-					<input name = "Password" id="password_signup" type="password" placeholder = "Password" required></br>
-				<fieldset data-role="controlgroup">
-					<legend>Gender:</legend>
-     				<input type="radio" name="Gender" id="radio-choice-1" value="Male" />
-     				<label for="radio-choice-1">Male</label>
-
-     				<input type="radio" name="Gender" id="radio-choice-2" value="Female"  />
-     				<label for="radio-choice-2">Female</label>
-				</fieldset>
-
-				<fieldset data-role="controlgroup">
-				    <legend>Interests:</legend>
-				      <input type="checkbox" name="checkbox-1a" id="checkbox-1a" class="custom" value="Sports">
-				      <label for="checkbox-1a">Sports</label>
-
-				      <input type="checkbox" name="checkbox-2a" id="checkbox-2a" class="custom" value="Art">
-				      <label for="checkbox-2a">Art</label>
-
-				      <input type="checkbox" name="checkbox-3a" id="checkbox-3a" class="custom" value="Music">
-				      <label for="checkbox-3a">Music</label>
-
-				      <input type="checkbox" name="checkbox-4a" id="checkbox-4a" class="custom" value="Books">
-				      <label for="checkbox-4a">Books</label>
-    			</fieldset>
-
-
-					<input type = "submit" value = "Sign Up">
-				</form>
-			</div>
-
-			<!-- footer -->
-			<div data-role="footer">
-				<h4>Madhu Anandan</h4>
-			</div>
-			<!-- /footer -->
-		</div>
-		<!-- /page -->
-
 		<!-- Start of page3 -->
-		<div data-role="page" id="myProfile">
+		<div data-role="page" id="validPage">
 			<!-- Header -->
 			<div data-role="header">
-				<h1> My Profile </h1>
+				<h1> Valid Credentials </h1>
 			</div>
 			<!-- /header -->
 			<!-- Content    -->
@@ -181,13 +127,16 @@
 				<div id="output">
 				</div>
 				<div class="ui-content">
-					<a href="#loginPage" class="ui-btn ui-icon-home ui-btn-icon-left">Login</a>
+					<center>
+					<p class="norm"> Success!! It is a valid Credit Card Number </br></p>
+					<a href="#paymentPage" data-transition="slidefade">Click here to try again</a>
+					</center>
 				</div>
 			</div>
 			<!-- /content -->
 			<!-- footer -->
 			<div data-role="footer">
-				<h4>Madhu Anandan</h4>
+				<h4>&copy; Madhu Anandan</h4>
 			</div>
 			<!-- /footer -->
 		</div>
@@ -202,12 +151,15 @@
 			<!-- /header -->
 			<!-- Content    -->
 			<div data-role="content">
-				<p>Invalid Credentials!!!<br/>If you are a new user please <a href="#signUpPage" data-transition="flip">Sign Up</a><br/><a href="#loginPage" data-transition="flip">Login</a></p>
+				<center>
+				<p>Invalid Credentials!!!<br/>
+				<a href="#paymentPage" data-transition="slidefade">Click here to try again</a></p>
+				</center>
 			</div>
 			<!-- /content -->
 			<!-- footer -->
 			<div data-role="footer">
-				<h4>Madhu Anandan</h4>
+				<h4>&copy; Madhu Anandan</h4>
 			</div>
 			<!-- /footer -->
 		</div>
